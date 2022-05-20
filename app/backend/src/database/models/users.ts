@@ -2,7 +2,9 @@ import { DataTypes, Model } from 'sequelize';
 import db from '.';
 
 class Users extends Model {
-  public userName: string;
+  public id: number;
+
+  public username: string;
 
   public role: string;
 
@@ -11,6 +13,10 @@ class Users extends Model {
   public password: string;
 }
 Users.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+  },
   username: DataTypes.STRING,
   role: DataTypes.STRING,
   email: DataTypes.STRING,
