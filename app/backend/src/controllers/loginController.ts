@@ -6,8 +6,6 @@ import Users from '../database/models/users';
 import Login from '../interfaces/login.interface';
 
 class LoginController {
-  constructor(private loginService = new LoginService()) { }
-
   public authorize: RequestHandler = async (req, res, next) => {
     try {
       const request: Login = req.body;
