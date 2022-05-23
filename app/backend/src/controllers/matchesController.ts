@@ -34,6 +34,17 @@ class MatchesController {
       next(err);
     }
   };
+
+  public attGoalsMacthes: RequestHandler = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      await MatchesService.updateGoals(Number(id), homeTeamGoals, awayTeamGoals);
+      return res.status(201).end();
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default MatchesController;

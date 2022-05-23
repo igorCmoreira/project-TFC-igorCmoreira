@@ -1,13 +1,11 @@
 import { readFileSync } from 'fs';
 import { sign, verify } from 'jsonwebtoken';
+import { compareSync } from 'bcryptjs';
 import Users from '../database/models/users';
 
 class Auth {
   public static checkPassword(pass:(string | undefined), password:string) {
-    if (pass !== password) {
-      return false;
-    }
-    return true;
+    return compareSync(password, pass!);
   }
 
   public static getToken(user:Users) {

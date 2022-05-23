@@ -14,6 +14,7 @@ router.post(
   matchesVerify.checkTeams,
   matchesController.setMatches,
 );
+router.patch('/matches/:id', IsValidate.validate, matchesController.attGoalsMacthes);
 router.patch('/matches/:id/finish', IsValidate.validate, matchesController.attMatches);
 
 export default router;

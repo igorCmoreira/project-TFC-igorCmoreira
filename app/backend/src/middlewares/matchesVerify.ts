@@ -14,7 +14,7 @@ class MatchesVerify {
   public static checkTeams: RequestHandler = async (req, res, next) => {
     const { homeTeam, awayTeam } = req.body;
     if (!(await TeamsService.findOne(homeTeam)) || !(await TeamsService.findOne(awayTeam))) {
-      return res.status(404).send({ message: 'Team not found' });
+      return res.status(404).send({ message: 'There is no team with such id!' });
     }
     next();
   };

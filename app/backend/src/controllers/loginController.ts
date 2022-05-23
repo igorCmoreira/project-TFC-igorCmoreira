@@ -11,8 +11,11 @@ class LoginController {
       const request: Login = req.body;
       const { email, password } = request;
       const user:(Users | null) = await LoginService.findOne(email);
+      if (!user) {
+        return res.status(401).send({ message: 'Incorrect email or password' });
+      }
       const passValid = Auth.checkPassword(user?.password, password);
-      if (!user || !passValid) {
+      if (!passValid) {
         return res.status(401).send({ message: 'Incorrect email or password' });
       }
       const result = Auth.validLogin(user);
