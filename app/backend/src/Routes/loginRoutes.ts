@@ -11,8 +11,8 @@ const loginValidation = new LoginValidation();
 router.post(
   '/login',
   loginValidation.emailValidator,
-  IsValidate.correctDate,
   loginValidation.passwordValidator,
+  IsValidate.correctDate,
   loginController.authorize,
 );
 router.get('/login/validate', loginController.validate);
