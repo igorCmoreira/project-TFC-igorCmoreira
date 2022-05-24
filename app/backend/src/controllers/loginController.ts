@@ -9,16 +9,9 @@ class LoginController {
   public authorize: RequestHandler = async (req, res, next) => {
     try {
       const request: Login = req.body;
-      const { email, password } = request;
+      const { email } = request;
       const user:(Users | null) = await LoginService.findOne(email);
-      if (!user) {
-        return res.status(401).send({ message: 'Incorrect email or password' });
-      }
-      const passValid = Auth.checkPassword(user?.password, password);
-      if (!passValid) {
-        return res.status(401).send({ message: 'Incorrect email or password' });
-      }
-      const result = Auth.validLogin(user);
+      const result = Auth.validLogin(user!);
       return res.status(200).send(result);
     } catch (err) {
       next(err);

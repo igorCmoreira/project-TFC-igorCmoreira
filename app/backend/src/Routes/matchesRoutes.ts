@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import MatchesController from '../controllers/matchesController';
-import IsValidate from '../middlewares/isAuthrizate';
+import IsValidate from '../middlewares/isAuthorizate';
 import matchesVerify from '../middlewares/matchesVerify';
 
 const router = Router();
