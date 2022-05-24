@@ -3,10 +3,16 @@ import db from '.';
 import Matches from './matches';
 
 class Teams extends Model {
+  public id: number;
+
   public teamName: string;
 }
 
 Teams.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+  },
   teamName: DataTypes.STRING,
 }, {
   underscored: true,
