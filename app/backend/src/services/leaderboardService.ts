@@ -49,9 +49,15 @@ class LeaderboardService {
     return homeTeamGoals;
   };
 
-  public static async allBoard() {
-    const matches = await Matches.findAll({ where: { inProgress: false } });
-    const teams = await Teams.findAll();
+  public static ratings = (result: LeaderBoardInfo[]) => result.sort((f, s) => {
+    if (s.totalPoints - f.totalPoints !== 0) return s.totalPoints - f.totalPoints;
+    if (s.goalsBalance - f.goalsBalance !== 0) return s.goalsBalance - f.goalsBalance;
+    if (s.goalsFavor - f.goalsFavor !== 0) return s.goalsFavor - f.goalsFavor;
+    if (s.goalsOwn - f.goalsOwn !== 0) return s.goalsOwn - f.goalsOwn;
+    return 0;
+  });
+
+  public static totalBoard(teams: Teams[], matches: Matches[]) {
     const result = teams.map((team) => {
       const info = { ...this.startInfo };
       info.name = team.teamName;
@@ -75,13 +81,82 @@ class LeaderboardService {
       info.efficiency = Number(((info.totalPoints / (info.totalGames * 3)) * 100).toFixed(2));
       return info;
     });
-    return result.sort((a, b) => {
-      if (b.totalPoints - a.totalPoints !== 0) return b.totalPoints - a.totalPoints;
-      if (b.goalsBalance - a.goalsBalance !== 0) return b.goalsBalance - a.goalsBalance;
-      if (b.goalsFavor - a.goalsFavor !== 0) return b.goalsFavor - a.goalsFavor;
-      if (b.goalsOwn - a.goalsOwn !== 0) return b.goalsOwn - a.goalsOwn;
-      return 0;
+    return result;
+  }
+
+  public static totalBoardHome(teams: Teams[], matches: Matches[]) {
+    const result = teams.map((team) => {
+      const info = { ...this.startInfo };
+      info.name = team.teamName;
+      matches.forEach((match) => {
+        const { homeTeam, homeTeamGoals, awayTeamGoals } = match;
+        if (team.id === homeTeam) {
+          info.totalGames += 1;
+          if (homeTeamGoals === awayTeamGoals) {
+            info.totalDraws += 1;
+          } else if (this.winner(match, team.id)) {
+            info.totalVictories += 1;
+          } else {
+            info.totalLosses += 1;
+          }
+          info.goalsFavor += this.winnerGoal(match, team.id);
+          info.goalsOwn += this.LosserGoal(match, team.id);
+        }
+      });
+      info.totalPoints = (info.totalVictories * 3) + info.totalDraws;
+      info.goalsBalance = info.goalsFavor - info.goalsOwn;
+      info.efficiency = Number(((info.totalPoints / (info.totalGames * 3)) * 100).toFixed(2));
+      return info;
     });
+    return result;
+  }
+
+  public static totalBoardAway(teams: Teams[], matches: Matches[]) {
+    const result = teams.map((team) => {
+      const info = { ...this.startInfo };
+      info.name = team.teamName;
+      matches.forEach((match) => {
+        const { awayTeam, homeTeamGoals, awayTeamGoals } = match;
+        if (team.id === awayTeam) {
+          info.totalGames += 1;
+          if (homeTeamGoals === awayTeamGoals) {
+            info.totalDraws += 1;
+          } else if (this.winner(match, team.id)) {
+            info.totalVictories += 1;
+          } else {
+            info.totalLosses += 1;
+          }
+          info.goalsFavor += this.winnerGoal(match, team.id);
+          info.goalsOwn += this.LosserGoal(match, team.id);
+        }
+      });
+      info.totalPoints = (info.totalVictories * 3) + info.totalDraws;
+      info.goalsBalance = info.goalsFavor - info.goalsOwn;
+      info.efficiency = Number(((info.totalPoints / (info.totalGames * 3)) * 100).toFixed(2));
+      return info;
+    });
+    return result;
+  }
+
+  public static async allBoard() {
+    const matches = await Matches.findAll({ where: { inProgress: false } });
+    const teams = await Teams.findAll();
+    const result = this.totalBoard(teams, matches);
+    return this.ratings(result);
+  }
+
+  public static async allBoardAway() {
+    const matches = await Matches.findAll({ where: { inProgress: false } });
+    const teams = await Teams.findAll();
+    const result = this.totalBoardAway(teams, matches);
+    return this.ratings(result);
+  }
+
+  public static async allBoardHome() {
+    const matches = await Matches.findAll({ where: { inProgress: false } });
+    const teams = await Teams.findAll();
+    const result = this.totalBoardHome(teams, matches);
+    return this.ratings(result);
   }
 }
 export default LeaderboardService;
