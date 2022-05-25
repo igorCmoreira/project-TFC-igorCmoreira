@@ -30,7 +30,7 @@ class MatchesController {
       console.log(id);
       await MatchesService
         .updateMatches(Number(id));
-      return res.status(200).end();
+      return res.status(200).send({ message: 'Finalizado' });
     } catch (err) {
       next(err);
     }
