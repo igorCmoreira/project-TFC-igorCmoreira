@@ -30,7 +30,7 @@ class MatchesService {
   };
 
   public static updateMatches = async (id:number) => Matches
-    .update({ inProgress: 0 }, { where: { id } });
+    .update({ inProgress: 1 }, { where: { id } });
 
   public static updateGoals = async (id:number, homeGoals:number, awayGoals:number) => Matches
     .update({ homeTeamGoals: homeGoals, awayTeamGoals: awayGoals }, { where: { id } });

@@ -15,6 +15,6 @@ router.post(
   matchesController.setMatches,
 );
 router.patch('/matches/:id', IsValidate.validate, matchesController.attGoalsMacthes);
-router.patch('/matches/:id/finish', IsValidate.validate, matchesController.attMatches);
+router.patch('/matches/:id/finish', matchesController.attMatches);
 
 export default router;

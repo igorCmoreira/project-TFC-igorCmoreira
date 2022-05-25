@@ -17,7 +17,7 @@ class MatchesController {
   public setMatches: RequestHandler = async (req, res, next) => {
     try {
       const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
-      return res.status(200).send(await MatchesService
+      return res.status(201).send(await MatchesService
         .createMatches({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals }));
     } catch (err) {
       next(err);
@@ -27,6 +27,7 @@ class MatchesController {
   public attMatches: RequestHandler = async (req, res, next) => {
     try {
       const { id } = req.params;
+      console.log(id);
       await MatchesService
         .updateMatches(Number(id));
       return res.status(200).end();
