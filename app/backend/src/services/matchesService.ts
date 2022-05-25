@@ -33,7 +33,10 @@ class MatchesService {
     .update({ inProgress: 0 }, { where: { id } });
 
   public static updateGoals = async (id:number, homeGoals:number, awayGoals:number) => Matches
-    .update({ homeTeamGoals: homeGoals, awayTeamGoals: awayGoals }, { where: { id } });
+    .update(
+      { homeTeamGoals: homeGoals, awayTeamGoals: awayGoals, inProgress: 1 },
+      { where: { id } },
+    );
 }
 
 export default MatchesService;

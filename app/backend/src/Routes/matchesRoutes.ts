@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import MatchesController from '../controllers/matchesController';
-import IsValidate from '../middlewares/isAuthorizate';
 import matchesVerify from '../middlewares/matchesVerify';
 
 const router = Router();
@@ -14,7 +13,7 @@ router.post(
   matchesVerify.checkTeams,
   matchesController.setMatches,
 );
-router.patch('/matches/:id', IsValidate.validate, matchesController.attGoalsMacthes);
+router.patch('/matches/:id', matchesController.attGoalsMacthes);
 router.patch('/matches/:id/finish', matchesController.attMatches);
 
 export default router;

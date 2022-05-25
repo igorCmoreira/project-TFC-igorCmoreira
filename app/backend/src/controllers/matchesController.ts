@@ -40,8 +40,8 @@ class MatchesController {
     try {
       const { id } = req.params;
       const { homeTeamGoals, awayTeamGoals } = req.body;
-      await MatchesService.updateGoals(Number(id), homeTeamGoals, awayTeamGoals);
-      return res.status(201).end();
+      const result = await MatchesService.updateGoals(Number(id), homeTeamGoals, awayTeamGoals);
+      return res.status(200).send(result);
     } catch (err) {
       next(err);
     }
